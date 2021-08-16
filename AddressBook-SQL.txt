@@ -1,0 +1,423 @@
+------------------------------------------Welcome to AddressBookSystem---------------------------------------------------
+#UC1-Ability to create addressbook service database
+---------------------------------------------------
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| payroll_service    |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (2.16 sec)
+
+mysql> create database AddressBookSystem;
+Query OK, 1 row affected (0.88 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| addressbooksystem  |
+| information_schema |
+| mysql              |
+| payroll_service    |
+| performance_schema |
+| sys                |
++--------------------+
+6 rows in set (0.08 sec)
+
+#UC2-Ability to create addressbook table
+----------------------------------------
+
+mysql> create table addressbook(
+    -> firstname        varchar(30)     not null,
+    -> lastname         varchar(30)     not null,
+    -> address          varchar(120)     not null,
+    -> city             varchar(120)     not null,
+    -> state            varchar(30)     not null,
+    -> zip              varchar(6)      not null,
+    -> phonenumber      varchar(15)     not null,
+    -> email            varchar(30)     not null,
+    -> primary key      (firstname, lastname)
+    -> );
+Query OK, 0 rows affected (3.82 sec)
+
+mysql> desc addressbook;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| firstname   | varchar(30)  | NO   | PRI | NULL    |       |
+| lastname    | varchar(30)  | NO   | PRI | NULL    |       |
+| address     | varchar(120) | NO   |     | NULL    |       |
+| city        | varchar(120) | NO   |     | NULL    |       |
+| state       | varchar(30)  | NO   |     | NULL    |       |
+| zip         | varchar(6)   | NO   |     | NULL    |       |
+| phonenumber | varchar(15)  | NO   |     | NULL    |       |
+| email       | varchar(30)  | NO   |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+8 rows in set (0.25 sec)
+
+#UC3-Ability to insert new contacts to addressbook
+--------------------------------------------------
+
+mysql> insert into addressbook (firstname, lastname, address, city, state, zip, phonenumber, email) values
+    -> ('Sumesh','Jena','Basanty Colony','Rourkela','Odisha','769012','7008888888','sumeshjena.co@gmail.com'),
+    -> ('Chinmay','das','madhupur','jajpur','odisha','202124','02055426545','das@gmail.com'),
+    -> ('Sam','paul','Colony-1','pune','maharastra','202025','2542954569','sam.paul23@gmail.com');
+Query OK, 3 rows affected (0.48 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from addressbook;
++-----------+----------+----------------+----------+------------+--------+-------------+-------------------------+
+| firstname | lastname | address        | city     | state      | zip    | phonenumber | email                   |
++-----------+----------+----------------+----------+------------+--------+-------------+-------------------------+
+| Chinmay   | das      | madhupur       | jajpur   | odisha     | 202124 | 02055426545 | das@gmail.com           |
+| Sam       | paul     | Colony-1       | pune     | maharastra | 202025 | 2542954569  | sam.paul23@gmail.com    |
+| Sumesh    | Jena     | Basanty Colony | Rourkela | Odisha     | 769012 | 7008888888  | sumeshjena.co@gmail.com |
++-----------+----------+----------------+----------+------------+--------+-------------+-------------------------+
+3 rows in set (0.05 sec)
+
+#UC4-Ability to edit existing contact person using there name
+-------------------------------------------------------------
+
+mysql> update addressbook set phonenumber ='7008944444' where firstname = 'Chinmay' and lastname = 'das';
+Query OK, 1 row affected (0.82 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from addressbook;
++-----------+----------+----------------+----------+------------+--------+-------------+-------------------------+
+| firstname | lastname | address        | city     | state      | zip    | phonenumber | email                   |
++-----------+----------+----------------+----------+------------+--------+-------------+-------------------------+
+| Chinmay   | das      | madhupur       | jajpur   | odisha     | 202124 | 7008944444  | das@gmail.com           |
+| Sam       | paul     | Colony-1       | pune     | maharastra | 202025 | 2542954569  | sam.paul23@gmail.com    |
+| Sumesh    | Jena     | Basanty Colony | Rourkela | Odisha     | 769012 | 7008888888  | sumeshjena.co@gmail.com |
++-----------+----------+----------------+----------+------------+--------+-------------+-------------------------+
+3 rows in set (0.04 sec)
+
+#UC5-Ability to delete a person using person name.
+-------------------------------------------------
+
+mysql> delete from addressbook where firstname = 'Sam' and lastname = 'paul';
+Query OK, 1 row affected (0.41 sec)
+
+mysql> select * from addressbook;
++-----------+----------+----------------+----------+--------+--------+-------------+-------------------------+
+| firstname | lastname | address        | city     | state  | zip    | phonenumber | email                   |
++-----------+----------+----------------+----------+--------+--------+-------------+-------------------------+
+| Chinmay   | das      | madhupur       | jajpur   | odisha | 202124 | 7008944444  | das@gmail.com           |
+| Sumesh    | Jena     | Basanty Colony | Rourkela | Odisha | 769012 | 7008888888  | sumeshjena.co@gmail.com |
++-----------+----------+----------------+----------+--------+--------+-------------+-------------------------+
+2 rows in set (0.03 sec)
+
+#UC6-Ability to retreive person belonging to a city or state.
+-------------------------------------------------------------
+
+mysql> insert into addressbook (firstname, lastname, address, city, state, zip, phonenumber, email) values
+    -> ('Satbir','shamey','flat-34/4','chandigarh','punjab','698542','5874521547','shamey43@gmail.com'),
+    -> ('Chandini','das','cuttuck','bhubaneswar','odisha','202450','2549876334','chandini@gmail.com');
+Query OK, 2 rows affected (0.13 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from addressbook;
++-----------+----------+----------------+-------------+--------+--------+-------------+-------------------------+
+| firstname | lastname | address        | city        | state  | zip    | phonenumber | email                   |
++-----------+----------+----------------+-------------+--------+--------+-------------+-------------------------+
+| Chandini  | das      | cuttuck        | bhubaneswar | odisha | 202450 | 2549876334  | chandini@gmail.com      |
+| Chinmay   | das      | madhupur       | jajpur      | odisha | 202124 | 7008944444  | das@gmail.com           |
+| Satbir    | shamey   | flat-34/4      | chandigarh  | punjab | 698542 | 5874521547  | shamey43@gmail.com      |
+| Sumesh    | Jena     | Basanty Colony | Rourkela    | Odisha | 769012 | 7008888888  | sumeshjena.co@gmail.com |
++-----------+----------+----------------+-------------+--------+--------+-------------+-------------------------+
+4 rows in set (0.02 sec)
+
+#UC7-Ability to retrive size of addressbook by city or state.
+-------------------------------------------------------------
+
+mysql> select state, count(state) from addressbook group by state;
++--------+--------------+
+| state  | count(state) |
++--------+--------------+
+| odisha |            3 |
+| punjab |            1 |
++--------+--------------+
+2 rows in set (0.08 sec)
+
+mysql> select city, count(city) from addressbook group by city;
++-------------+-------------+
+| city        | count(city) |
++-------------+-------------+
+| bhubaneswar |           1 |
+| jajpur      |           1 |
+| chandigarh  |           1 |
+| Rourkela    |           1 |
++-------------+-------------+
+4 rows in set (0.00 sec)
+
+mysql> insert into addressbook (firstname, lastname, address, city, state, zip,phonenumber, email) values
+    -> ('anuj','sharma','dadar','mumbai','maharashtra','587412','8547521548','anuj@gmail.com'),
+    -> ('Babu','singh','jatani','bhbaneswar','odisha','769002','97539435','babu@gmail.com'),
+    -> ('Smiley','shah','jatni','bhubaneswar','odisha','789023','798456132','smiley@gmail.com');
+Query OK, 3 rows affected (0.39 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from addressbook;
++-----------+----------+----------------+-------------+-------------+--------+-------------+-------------------------+
+| firstname | lastname | address        | city        | state       | zip    | phonenumber | email                   |
++-----------+----------+----------------+-------------+-------------+--------+-------------+-------------------------+
+| anuj      | sharma   | dadar          | mumbai      | maharashtra | 587412 | 8547521548  | anuj@gmail.com          |
+| Babu      | singh    | jatani         | bhbaneswar  | odisha      | 769002 | 97539435    | babu@gmail.com          |
+| Chandini  | das      | cuttuck        | bhubaneswar | odisha      | 202450 | 2549876334  | chandini@gmail.com      |
+| Chinmay   | das      | madhupur       | jajpur      | odisha      | 202124 | 7008944444  | das@gmail.com           |
+| Satbir    | shamey   | flat-34/4      | chandigarh  | punjab      | 698542 | 5874521547  | shamey43@gmail.com      |
+| Smiley    | shah     | jatni          | bhubaneswar | odisha      | 789023 | 798456132   | smiley@gmail.com        |
+| Sumesh    | Jena     | Basanty Colony | Rourkela    | Odisha      | 769012 | 7008888888  | sumeshjena.co@gmail.com |
++-----------+----------+----------------+-------------+-------------+--------+-------------+-------------------------+
+7 rows in set (0.00 sec)
+
+#UC8-Ability to retrive entries sorted alphabatically by person name for a given city.
+-------------------------------------------------------------------------------------
+
+mysql> select * from addressbook where city = 'bhubaneswar' order by firstname asc;
++-----------+----------+---------+-------------+--------+--------+-------------+--------------------+
+| firstname | lastname | address | city        | state  | zip    | phonenumber | email              |
++-----------+----------+---------+-------------+--------+--------+-------------+--------------------+
+| Chandini  | das      | cuttuck | bhubaneswar | odisha | 202450 | 2549876334  | chandini@gmail.com |
+| Smiley    | shah     | jatni   | bhubaneswar | odisha | 789023 | 798456132   | smiley@gmail.com   |
++-----------+----------+---------+-------------+--------+--------+-------------+--------------------+
+2 rows in set (0.00 sec)
+
+#UC9-Ability to identify each addressbook with name and type.
+-------------------------------------------------------------
+
+mysql> update addressbook set addressbookname = 'familyBook' where firstname = 'Sumesh';
+Query OK, 1 row affected (0.08 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update addressbook set addressbookname = 'friendBook' where firstname = 'Satbir';
+Query OK, 1 row affected (0.09 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from addressbook;
++-----------+----------+----------------+-------------+-------------+--------+-------------+-------------------------+-----------------+------+
+| firstname | lastname | address        | city        | state       | zip    | phonenumber | email                   | addressbookname | type |
++-----------+----------+----------------+-------------+-------------+--------+-------------+-------------------------+-----------------+------+
+| anuj      | sharma   | dadar          | mumbai      | maharashtra | 587412 | 8547521548  | anuj@gmail.com          | NULL            | NULL |
+| Babu      | singh    | jatani         | bhbaneswar  | odisha      | 769002 | 97539435    | babu@gmail.com          | NULL            | NULL |
+| Chandini  | das      | cuttuck        | bhubaneswar | odisha      | 202450 | 2549876334  | chandini@gmail.com      | NULL            | NULL |
+| Chinmay   | das      | madhupur       | jajpur      | odisha      | 202124 | 7008944444  | das@gmail.com           | NULL            | NULL |
+| Satbir    | shamey   | flat-34/4      | chandigarh  | punjab      | 698542 | 5874521547  | shamey43@gmail.com      | friendBook      | NULL |
+| Smiley    | shah     | jatni          | bhubaneswar | odisha      | 789023 | 798456132   | smiley@gmail.com        | NULL            | NULL |
+| Sumesh    | Jena     | Basanty Colony | Rourkela    | Odisha      | 769012 | 7008888888  | sumeshjena.co@gmail.com | familyBook      | NULL |
++-----------+----------+----------------+-------------+-------------+--------+-------------+-------------------------+-----------------+------+
+7 rows in set (0.00 sec)
+
+mysql> update addressbook set type = 'family' where firstname = 'Sumesh';
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update addressbook set type = 'friend' where firstname = 'Satbir';
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from addressbook;
++-----------+----------+----------------+-------------+-------------+--------+-------------+-------------------------+-----------------+--------+
+| firstname | lastname | address        | city        | state       | zip    | phonenumber | email                   | addressbookname | type   |
++-----------+----------+----------------+-------------+-------------+--------+-------------+-------------------------+-----------------+--------+
+| anuj      | sharma   | dadar          | mumbai      | maharashtra | 587412 | 8547521548  | anuj@gmail.com          | NULL            | NULL   |
+| Babu      | singh    | jatani         | bhbaneswar  | odisha      | 769002 | 97539435    | babu@gmail.com          | NULL            | NULL   |
+| Chandini  | das      | cuttuck        | bhubaneswar | odisha      | 202450 | 2549876334  | chandini@gmail.com      | NULL            | NULL   |
+| Chinmay   | das      | madhupur       | jajpur      | odisha      | 202124 | 7008944444  | das@gmail.com           | NULL            | NULL   |
+| Satbir    | shamey   | flat-34/4      | chandigarh  | punjab      | 698542 | 5874521547  | shamey43@gmail.com      | friendBook      | friend |
+| Smiley    | shah     | jatni          | bhubaneswar | odisha      | 789023 | 798456132   | smiley@gmail.com        | NULL            | NULL   |
+| Sumesh    | Jena     | Basanty Colony | Rourkela    | Odisha      | 769012 | 7008888888  | sumeshjena.co@gmail.com | familyBook      | family |
++-----------+----------+----------------+-------------+-------------+--------+-------------+-------------------------+-----------------+--------+
+7 rows in set (0.00 sec)
+
+mysql> select count(type) from addressbook;
++-------------+
+| count(type) |
++-------------+
+|           2 |
++-------------+
+1 row in set (0.04 sec)
+
+#UC10-Ability to get number of contact person count by type.
+-----------------------------------------------------------
+
+mysql> select type, Count(firstName) from addressBook group by type;
++--------+------------------+
+| type   | Count(firstName) |
++--------+------------------+
+| NULL   |                5 |
+| friend |                1 |
+| family |                1 |
++--------+------------------+
+
+#UC11-Ability to add person to both friend and family
+------------------------------------------------------
+
+mysql> insert into addressbook values('Ritesh','Jena','1st-floor','pune','maharastra','587452','8954268754'
+    -> ,'ritesh12@gmail.com','familyBook','family');
+
+#UC12-Addressbook system ER Diagram implimentation
+---------------------------------------------------
+
+mysql> create table contacts(
+    -> firstname        varchar(30)     not null,
+    -> lastname         varchar(30)     not null,
+    -> address          varchar(150)    not null,
+    -> phonenumber      varchar(12)     not null,
+    -> email            varchar(30)     not null,
+    -> primary key(firstname));
+Query OK, 0 rows affected (1.94 sec)
+
+mysql> desc contacts;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| firstname   | varchar(30)  | NO   | PRI | NULL    |       |
+| lastname    | varchar(30)  | NO   |     | NULL    |       |
+| address     | varchar(150) | NO   |     | NULL    |       |
+| phonenumber | varchar(12)  | NO   |     | NULL    |       |
+| email       | varchar(30)  | NO   |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+5 rows in set (0.12 sec)
+
+mysql> create table address(
+    -> zip      varchar(6)      not null,
+    -> city     varchar(30)     not null,
+    -> state    varchar(30)     not null,
+    -> primary key(zip));
+Query OK, 0 rows affected (1.08 sec)
+
+mysql> desc address;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| zip   | varchar(6)  | NO   | PRI | NULL    |       |
+| city  | varchar(30) | NO   |     | NULL    |       |
+| state | varchar(30) | NO   |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> create table contacts_address(
+    -> firstname        varchar(30)     not null,
+    -> zip              varchar(6)      not null,
+    -> foreign key(firstname) references contacts(firstname),
+    -> foreign key(zip) references address(zip));
+Query OK, 0 rows affected (3.48 sec)
+
+mysql> desc contacts_address;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| firstname | varchar(30) | NO   | MUL | NULL    |       |
+| zip       | varchar(6)  | NO   | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+2 rows in set (0.06 sec)
+
+mysql> create table relations(
+    -> type varchar(15),
+    -> primary key(type));
+Query OK, 0 rows affected (1.51 sec)
+
+mysql> desc relations;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| type  | varchar(15) | NO   | PRI | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+1 row in set (0.18 sec)
+
+mysql> create table contacts_relation(
+    -> firstname varchar(30) not null,
+    -> type varchar(15),
+    -> foreign key (firstname) references contacts(firstname),
+    -> foreign key (type) references relations(type));
+Query OK, 0 rows affected (4.50 sec)
+
+mysql> desc contacts_relation;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| firstname | varchar(30) | NO   | MUL | NULL    |       |
+| type      | varchar(15) | YES  | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+2 rows in set (0.05 sec)
+
+mysql> show tables;
++-----------------------------+
+| Tables_in_addressbooksystem |
++-----------------------------+
+| address                     |
+| addressbook                 |
+| contacts                    |
+| contacts_address            |
+| contacts_relation           |
+| relations                   |
++-----------------------------+
+6 rows in set (0.02 sec)
+
+mysql> insert into contacts values('Sumesh','jena','1st-floor','7008955425','sumesh@gmail.com'),
+    -> ('Ritesh','jena','2nd-floor','8045254714','Ritesh@gmail.com'),
+    -> ('Subham','gupta','3rd-floor','7520856425','subham@gmail.com'),
+    -> ('Satbir','shamey','4th-floor','70089542654','satbir22@gmail.com');
+Query OK, 4 rows affected (0.46 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from contacts;
++-----------+----------+-----------+-------------+--------------------+
+| firstname | lastname | address   | phonenumber | email              |
++-----------+----------+-----------+-------------+--------------------+
+| Ritesh    | jena     | 2nd-floor | 8045254714  | Ritesh@gmail.com   |
+| Satbir    | shamey   | 4th-floor | 70089542654 | satbir22@gmail.com |
+| Subham    | gupta    | 3rd-floor | 7520856425  | subham@gmail.com   |
+| Sumesh    | jena     | 1st-floor | 7008955425  | sumesh@gmail.com   |
++-----------+----------+-----------+-------------+--------------------+
+4 rows in set (0.00 sec)
+
+mysql> insert into address values('458015','pune','maharastra'),('769002','rourkela','odisha'),('750102','bhubaneswar','odisha'),('769001','rourkela','odisha');
+Query OK, 4 rows affected (0.34 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from address;
++--------+-------------+------------+
+| zip    | city        | state      |
++--------+-------------+------------+
+| 458015 | pune        | maharastra |
+| 750102 | bhubaneswar | odisha     |
+| 769001 | rourkela    | odisha     |
+| 769002 | rourkela    | odisha     |
++--------+-------------+------------+
+
+mysql> insert into relations values('family'),('friends'),('work');
+Query OK, 3 rows affected (0.35 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from relations;
++---------+
+| type    |
++---------+
+| family  |
+| friends |
+| work    |
++---------+
+3 rows in set (0.00 sec)
+
+mysql> insert into contacts_relation values('Sumesh','family'),
+    -> ('satbir','work'),
+    -> ('subham','friends');
+Query OK, 3 rows affected (0.66 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from contacts_relation;
++-----------+---------+
+| firstname | type    |
++-----------+---------+
+| Sumesh    | family  |
+| satbir    | work    |
+| subham    | friends |
++-----------+---------+
+
